@@ -1,23 +1,35 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import config from './config';
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    inflationsrate: 2
+    scenario: {},
+    scenarios: []
   },
   mutations: {
-    alterInflation(state, value) {
-      state.inflationsrate += value;
+    setScenarios(state, scenarios) {
+      state.scenarios = scenarios;
       return state;
     },
-    setInflation(state, value) {
-      state.inflationsrate = value;
+    setScenario(state, scenario) {
+      state.scenario = scenario;
       return state;
     }
   },
   actions: {
-
+    setScenario: async ({ commit }, id) => {
+      try {
+        const request = await fetch(`${config.backend}/scenarios/${id}`);
+        const scenario = await request.json();
+        commit('setScenario', scenario);
+      }
+      catch (e) {
+        console.error(e);
+      }
+    }
   }
 })

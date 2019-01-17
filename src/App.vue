@@ -8,12 +8,10 @@
 
     <v-content>
       <v-container>
+        <ScenarioInfo />
 
-        <Inflationsrate />
-        <br>
-        
         <v-scroll-x-transition mode="out-in">
-          <Akteure v-if="bottomNav === 'akteure'" />
+          <Agents v-if="bottomNav === 'akteure'" />
           <div v-if="bottomNav === 'news'" ><Akteure /></div>
         </v-scroll-x-transition>
 
@@ -36,8 +34,8 @@
 </template>
 
 <script>
-import Inflationsrate from './components/Inflationsrate';
-import Akteure from './components/Akteure'
+import ScenarioInfo from './components/ScenarioInfo';
+import Agents from './components/Agents'
 
 export default {
   name: 'app',
@@ -48,6 +46,17 @@ export default {
   },
   methods: {
   },
-  components: { Inflationsrate, Akteure }
+  mounted: async function() {
+    try {
+      const request = await fetch(`${this.$backend}/scenarios`);
+      const scenarios = await request.json();
+      this.$store.commit('setScenarios', scenarios);
+      this.$store.dispatch('setScenario', scenarios.find((scenario) => scenario.default).id);
+    }
+    catch (e) {
+      console.error(e);
+    }
+  },
+  components: { Agents, ScenarioInfo }
 }
 </script>
