@@ -1,52 +1,47 @@
 <template>
-  <v-app>
-    <v-toolbar app>
-      <v-toolbar-title>
-        <span class="headline">Inflation</span>
-      </v-toolbar-title>
-    </v-toolbar>
+  <v-app dark>
+    <ScenarioInfo :visible="controls.visible" :extended="scenarioInfoExtended" @toggle="toggleScenarioInfo" />
 
-    <v-content>
-      <v-container>
-        <ScenarioInfo />
-
-        <v-scroll-x-transition mode="out-in">
-          <Agents v-if="bottomNav === 'akteure'" />
-          <div v-if="bottomNav === 'news'" ><Akteure /></div>
-        </v-scroll-x-transition>
-
-      </v-container>
+    <v-content :style="{ opacity: scenarioInfo ? '0.4' : '1' }">
+      <Scenario :controls="controls.visible" />
     </v-content>
-
-    <v-bottom-nav :active.sync="bottomNav" value="true" fixed>
-      <v-btn value="akteure">
-        <span>Akteure</span>
-        <v-icon>mdi-view-grid</v-icon>
-      </v-btn>
-
-      <v-btn value="news">
-        <span>News</span>
-        <v-icon>mdi-newspaper</v-icon>
-      </v-btn>
-    </v-bottom-nav>
-    
   </v-app>
 </template>
 
 <script>
-import ScenarioInfo from './components/ScenarioInfo';
-import Agents from './components/Agents'
+import Scenario from './components/Scenario'
+import ScenarioInfo from './components/ScenarioInfo'
 
 export default {
   name: 'app',
   data() {
     return {
-      bottomNav: 'akteure'
+      controls: {
+        visible: true,
+        timeout: null
+      },
+      scenarioInfoExtended: false
     }
   },
   methods: {
+    toggleScenarioInfo() {
+      this.scenarioInfo = !this.scenarioInfo;
+    }
   },
   mounted: async function() {
+    const controlHandler = () => {
+      this.controls.visible = true;
+      clearTimeout(this.controls.timeout);
+      if (window.pageYOffset < 50) {
+        this.controls.timeout = setTimeout(() => {
+          this.controls.visible = true;
+        }, 3000);
+      }
+    };
+    window.addEventListener('mousemove', controlHandler);
+    window.addEventListener('scroll', controlHandler);
+    controlHandler();
+
     try {
       const request = await fetch(`${this.$backend}/scenarios`);
       const scenarios = await request.json();
@@ -57,6 +52,6 @@ export default {
       console.error(e);
     }
   },
-  components: { Agents, ScenarioInfo }
+  components: { Scenario, ScenarioInfo }
 }
 </script>

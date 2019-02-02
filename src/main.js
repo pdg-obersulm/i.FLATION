@@ -4,8 +4,8 @@ import App from './App.vue'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
 import store from './store'
-import VueSimpleMarkdown from 'vue-simple-markdown';
-import config from './config';
+import VueSimpleMarkdown from 'vue-simple-markdown'
+import config from './config'
 
 
 Vue.config.productionTip = false
