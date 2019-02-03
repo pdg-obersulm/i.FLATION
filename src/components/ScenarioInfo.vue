@@ -6,13 +6,34 @@
 					<span class="subheading">Aktuelles Szenario: {{ $store.state.scenario.scenario.name }}</span>
 				</v-toolbar-title>
 
+				<v-dialog v-model="info" max-width="500">
+					<v-btn icon slot="activator">
+						<v-icon>mdi-information</v-icon>
+					</v-btn>
+
+					<v-card>
+						<v-card-title class="headline" primary-title>
+							{{ $store.state.scenario.scenario.name }}
+						</v-card-title>
+
+						<v-card-text>
+							{{ $store.state.scenario.scenario.description }}
+						</v-card-text>
+
+						<v-divider></v-divider>
+
+						<v-card-actions>
+							<v-spacer></v-spacer>
+							<v-btn flat @click="info = false">
+								Schließen
+							</v-btn>
+						</v-card-actions>
+					</v-card>
+				</v-dialog>
+
 				<v-spacer />
 
-				<Inflationrate />
-
-				<v-btn icon @click="$emit('toggle')">
-					<v-icon>{{ extended ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-				</v-btn>
+				<SetScenario />
 			</v-toolbar>
 
 			<v-expand-transition mode="out-in">
@@ -25,10 +46,15 @@
 </template>
 
 <script>
-import Inflationrate from './Inflationrate';
+import SetScenario from './SetScenario';
 export default {
 	props: ['visible', 'extended'],
-	components: { Inflationrate }
+	data() {
+		return {
+			info: false
+		}
+	},
+	components: { SetScenario }
 }
 </script>
 

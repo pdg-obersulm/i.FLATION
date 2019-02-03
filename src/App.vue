@@ -1,8 +1,8 @@
 <template>
   <v-app dark>
-    <ScenarioInfo :visible="controls.visible" :extended="scenarioInfoExtended" @toggle="toggleScenarioInfo" />
+    <ScenarioInfo :visible="controls.visible" />
 
-    <v-content :style="{ opacity: scenarioInfo ? '0.4' : '1' }">
+    <v-content>
       <Scenario :controls="controls.visible" />
     </v-content>
   </v-app>
@@ -19,13 +19,7 @@ export default {
       controls: {
         visible: true,
         timeout: null
-      },
-      scenarioInfoExtended: false
-    }
-  },
-  methods: {
-    toggleScenarioInfo() {
-      this.scenarioInfo = !this.scenarioInfo;
+      }
     }
   },
   mounted: async function() {
@@ -34,7 +28,7 @@ export default {
       clearTimeout(this.controls.timeout);
       if (window.pageYOffset < 50) {
         this.controls.timeout = setTimeout(() => {
-          this.controls.visible = true;
+          this.controls.visible = false;
         }, 3000);
       }
     };

@@ -1,59 +1,19 @@
 <template>
-	<v-container fluid grid-list-md pa-0>
-		<v-layout offset-sm grid-list-xs row wrap class="mt-2">
-			<v-flex xs12 sm6 md3 lg2 xl2 v-for="agent in $store.state.scenario.agents" :key="agent._id">
-				<v-slide-y-transition mode="out-in">
-					<v-card>
-						<v-responsive :aspect-ratio="1/1">
-							<v-container fill-height class="text-xs-center">
-								<v-flex column>
-									<v-card-text>
-										<div>
-											<v-icon large>{{ agent.icon }}</v-icon>
-										</div>
-										<h3 class="mt-2">{{ agent.name }}</h3>
-									</v-card-text>
-
-									<v-flex align-self-end>
-										<v-btn flat @click="moreInfo(agent)">Mehr...</v-btn>
-									</v-flex>
-								</v-flex>
-							</v-container>
-						</v-responsive>
-					</v-card>
-				</v-slide-y-transition>
+	<v-container grid-list-md>
+		<v-layout offset-sm row wrap>
+			<v-flex lg4 md6 sm12 v-for="agent in $store.state.scenario.agents" :key="agent._id">
+				<v-card>
+					<v-img :src="agent.image ? `${publicPath}images/agents/${agent.image}` : `https://picsum.photos/800/400?random&${Math.random()}`" aspect-ratio="2">
+						<v-container fill-height fluid class="agent-info">
+							<v-layout fill-height column>
+								<h2>{{ agent.name }}</h2>
+								<vue-simple-markdown :source="agent.text" />
+							</v-layout>
+						</v-container>
+					</v-img>
+				</v-card>
 			</v-flex>
 		</v-layout>
-
-		<v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-			<v-card class="fill-height">
-				<v-toolbar dark color="primary">
-					<v-btn icon dark @click="dialog = false">
-						<v-icon>mdi-close</v-icon>
-					</v-btn>
-					<v-toolbar-title>{{ info.name }}</v-toolbar-title>
-				</v-toolbar>
-
-
-				<v-card-text>
-					<vue-simple-markdown :source="info.text" :highlight="false" />
-
-					<v-container fluid grid-list-md pa-0>
-						<v-layout offset-sm grid-list-xs row wrap>
-							<v-flex xs6 sm4 md2 v-for="(graph, index) in info.graphs" :key="index">
-								<v-card>
-									<v-card-text>
-										<v-sparkline :value="graph" auto-draw />
-										<span class="headline">15%</span>
-										<p>Lorem ipsum</p>
-									</v-card-text>
-								</v-card>
-							</v-flex>
-						</v-layout>
-					</v-container>
-				</v-card-text>
-			</v-card>
-		</v-dialog>
 	</v-container>
 </template>
 
@@ -61,6 +21,7 @@
 export default {
 	data() {
 		return {
+			publicPath: process.env.BASE_URL,
 			scenarioInfo: true,
 			dialog: false,
 			info: {
@@ -78,3 +39,9 @@ export default {
 	}
 }
 </script>
+
+<style lang="scss" scoped>
+.agent-info {
+	background-color: rgba(0,0,0,.5);
+}
+</style>
