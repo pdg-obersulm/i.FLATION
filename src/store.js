@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import config from './config';
+import backend from './backend';
 
 Vue.use(Vuex)
 
@@ -23,7 +23,7 @@ export default new Vuex.Store({
   actions: {
     setScenario: async ({ commit }, id) => {
       try {
-        const request = await fetch(`${config.backend}/scenarios/${id}`);
+        const request = await fetch(`${backend}/scenarios/${id}`);
         const scenario = await request.json();
         commit('setScenario', scenario);
       }

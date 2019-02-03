@@ -6,13 +6,12 @@ import '@mdi/font/css/materialdesignicons.css'
 import store from './store'
 import VueSimpleMarkdown from 'vue-simple-markdown'
 import VueShortkey from 'vue-shortkey'
-import config from './config'
-
+import backend from './backend'
 
 Vue.config.productionTip = false
 Vue.use(VueSimpleMarkdown);
 Vue.use(VueShortkey);
-Vue.prototype.$backend = config.backend;
+Vue.prototype.$backend = backend;
 
 new Vue({
   store,

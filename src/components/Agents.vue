@@ -1,9 +1,9 @@
 <template>
 	<v-container grid-list-md>
-		<v-layout offset-sm row wrap>
+		<v-layout offset-sm row wrap fill-height="">
 			<v-flex lg4 md6 sm12 v-for="agent in $store.state.scenario.agents" :key="agent._id">
-				<v-card>
-					<v-img :src="agent.image ? `${publicPath}images/agents/${agent.image}` : `https://picsum.photos/800/400?random&${Math.random()}`" aspect-ratio="2">
+				<v-card class="fill-height">
+					<v-img class="fill-height" :src="agent.image ? `${publicPath}images/agents/${agent.image}` : `https://picsum.photos/800/400?random&${Math.random()}`" aspect-ratio="2">
 						<v-container fill-height fluid class="agent-info">
 							<v-layout fill-height column>
 								<h2>{{ agent.name }}</h2>
