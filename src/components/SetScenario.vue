@@ -9,9 +9,9 @@
     
     <v-list>
       <v-list-tile
-        v-for="scenario in $store.state.scenarios"
-        :key="scenario.id"
-        @click="setScenario(scenario.id)"
+        v-for="(scenario, i) in $store.state.scenarios"
+        :key="i"
+        @click="setScenario(scenario)"
       >
         <v-list-tile-avatar>
           <v-avatar size="32px" tile>
@@ -33,9 +33,9 @@ export default {
 		}
 	},
 	methods: {
-		setScenario(id) {
+		setScenario(scenario) {
 			this.open = false;
-			this.$store.dispatch('setScenario', id);
+			this.$store.commit('setScenario', scenario);
 		}
 	}
 }

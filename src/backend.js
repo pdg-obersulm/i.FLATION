@@ -1,1 +1,0 @@
-export default process.env.NODE_ENV === 'production' ? 'https://inflation-api.pdg-obersulm.de' : 'http://localhost:3000';

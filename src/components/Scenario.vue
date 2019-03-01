@@ -1,22 +1,49 @@
 <template>
 	<div>
 		<div ref="player" :class="{ fullscreen }">
-			<video :poster="`${publicPath}images/scenarios/dummy_cover.png`" @pause="videoEvent" @playing="videoEvent" @timeupdate="videoEvent" ref="video" @dblclick="toggleFullscreen">
-				<source :src="`${publicPath}videos/scenarios/dummy_1080.mp4`" type="video/mp4">
-			</video>
+			<video
+				ref="video"
+				:poster="`${process.env.VUE_APP_CDN}/images/poster.png`"
+				:src="`${process.env.VUE_APP_CDN}/videos/${$store.state.scenario.slug}/${quality}.mp4`"
+				@pause="videoEvent"
+				@playing="videoEvent"
+				@waiting="videoWaiting"
+				@timeupdate="videoEvent"
+				@dblclick="toggleFullscreen"
+			></video>
 
 			<v-layout justify-center class="video-controls" :style="{ opacity: controls ? '1' : '0' }">
 				<v-card color="background">
 					<v-slider class="video-progress" min="0" :max="duration" step="0.1" :value="progress" @change="seek" @input="scan" @start="seeking = true" @end="seeking = false" />
 					<v-layout justify-space-around>
-						<v-btn icon>
-							<v-icon>mdi-quality-high</v-icon>
-						</v-btn>
+						<v-menu auto origin="center center">
+							<v-btn
+								icon
+								slot="activator"
+							>
+								<v-icon>mdi-quality-{{ quality === '1080' ? 'high' : 'medium' }}</v-icon>
+							</v-btn>
+
+							<v-list>
+								<v-list-tile @click="quality = '1080'">
+									<v-list-tile-title>1080p</v-list-tile-title>
+								</v-list-tile>
+								<v-list-tile @click="quality = '720'">
+									<v-list-tile-title>720p</v-list-tile-title>
+								</v-list-tile>
+							</v-list>
+						</v-menu>
 						<v-btn icon v-shortkey="{ j: ['j'], arrow: ['arrowleft'] }" @shortkey="rewind" @click="rewind">
 							<v-icon>mdi-rewind</v-icon>
 						</v-btn>
 						<v-btn icon v-shortkey="{ k: ['k'], space: ['space'] }" @shortkey="playPause" @click="playPause">
-							<v-icon>{{ playing ? 'mdi-pause' : 'mdi-play' }}</v-icon>
+							<v-progress-circular
+								v-if="buffering"
+								size="20"
+								width="2"
+								indeterminate
+							/>
+							<v-icon v-else>{{ playing ? 'mdi-pause' : 'mdi-play' }}</v-icon>
 						</v-btn>
 						<v-btn icon v-shortkey="{ l: ['l'], arrow: ['arrowright'] }" @shortkey="forward" @click="forward">
 							<v-icon>mdi-fast-forward</v-icon>
@@ -36,6 +63,8 @@
 <script>
 import Agents from './Agents'
 
+const defaultQuality = window.innerWidth > 1280 ? '1080' : '720';
+
 export default {
 	props: ['controls'],
 	data() {
@@ -45,7 +74,9 @@ export default {
 			progress: 0,
 			duration: 0,
 			seeking: false,
-			fullscreen: false
+			fullscreen: false,
+			quality: defaultQuality,
+			buffering: false
 		}
 	},
 	methods: {
@@ -64,7 +95,6 @@ export default {
 			this.$refs.video.currentTime += 5;
 		},
 		scan(value) {
-			// TODO: fix seeking issues
 			if (this.seeking) {
 				this.$refs.video.currentTime = value;
 			}
@@ -73,12 +103,18 @@ export default {
 			this.$refs.video.currentTime = value;
 		},
 		videoEvent(event) {
-			const {paused, currentTime, duration} = event.target;
+			const { paused, currentTime, duration } = event.target;
+
 			this.playing = !paused;
 			this.duration = duration;
+			this.buffering = false;
+
 			if (!this.seeking) {
 				this.progress = currentTime;
 			}
+		},
+		videoWaiting() {
+			this.buffering = true;
 		},
 		toggleFullscreen() {
 			const element = this.$refs.player;

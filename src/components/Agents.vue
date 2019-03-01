@@ -1,13 +1,20 @@
 <template>
 	<v-container grid-list-md>
+		<v-card v-if="judgement">
+			<v-card-text>
+				<h2>Unsere Beurteilung des Szenarios</h2>
+				<div v-html="judgement"></div>
+			</v-card-text>
+		</v-card>
+
 		<v-layout offset-sm row wrap fill-height="">
-			<v-flex lg4 md6 sm12 v-for="agent in $store.state.scenario.agents" :key="agent._id">
+			<v-flex lg4 md6 sm12 v-for="agent in agents" :key="agent._id">
 				<v-card class="fill-height">
-					<v-img class="fill-height" :src="agent.image ? `${publicPath}images/agents/${agent.image}` : `https://picsum.photos/800/400?random&${Math.random()}`" aspect-ratio="2">
+					<v-img class="fill-height" :src="`${process.env.VUE_APP_CDN}/images/agents/${agent.slug}.jpg`" aspect-ratio="2">
 						<v-container fill-height fluid class="agent-info">
 							<v-layout fill-height column>
 								<h2>{{ agent.name }}</h2>
-								<vue-simple-markdown :source="agent.text" />
+								<div v-html="agent.text"></div>
 							</v-layout>
 						</v-container>
 					</v-img>
@@ -18,23 +25,18 @@
 </template>
 
 <script>
+import markdown from 'markdown';
+
 export default {
-	data() {
-		return {
-			publicPath: process.env.BASE_URL,
-			scenarioInfo: true,
-			dialog: false,
-			info: {
-				graphs: [],
-				name: '',
-				text: ''
-			}
-		}
-	},
-	methods: {
-		moreInfo(agent) {
-			this.info = agent;
-			this.dialog = true;
+	computed: {
+		agents() {
+			return this.$store.state.scenario.agents.map((agent) => ({
+				...agent,
+				text: markdown.parse(agent.text)
+			}));
+		},
+		judgement() {
+			return this.$store.state.scenario.judgement ? markdown.parse(this.$store.state.scenario.judgement) : false;
 		}
 	}
 }
@@ -42,6 +44,6 @@ export default {
 
 <style lang="scss" scoped>
 .agent-info {
-	background-color: rgba(0,0,0,.5);
+	background-color: rgba(0,0,0,.75);
 }
 </style>

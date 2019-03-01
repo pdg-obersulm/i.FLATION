@@ -3,7 +3,7 @@
 		<v-card class="w-100 scenario-info" v-if="visible">
 			<v-toolbar card dense>
 				<v-toolbar-title>
-					<span class="subheading">Aktuelles Szenario: {{ $store.state.scenario.scenario.name }}</span>
+					<span class="subheading">Aktuelles Szenario: {{ $store.state.scenario.name }}</span>
 				</v-toolbar-title>
 
 				<v-dialog v-model="info" max-width="500">
@@ -13,11 +13,11 @@
 
 					<v-card>
 						<v-card-title class="headline" primary-title>
-							{{ $store.state.scenario.scenario.name }}
+							{{ $store.state.scenario.name }}
 						</v-card-title>
 
 						<v-card-text>
-							{{ $store.state.scenario.scenario.description }}
+							{{ $store.state.scenario.description }}
 						</v-card-text>
 
 						<v-divider></v-divider>
@@ -35,12 +35,6 @@
 
 				<SetScenario />
 			</v-toolbar>
-
-			<v-expand-transition mode="out-in">
-				<div v-if="extended">
-					<div class="pa-4">Lorem ipsum, hier etwas Senf...</div>
-				</div>
-			</v-expand-transition>
 		</v-card>
 	</v-slide-y-transition>
 </template>
