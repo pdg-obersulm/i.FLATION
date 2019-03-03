@@ -1,12 +1,9 @@
 <template>
   <v-menu bottom left offset-y>
-    <v-btn
-      slot="activator"
-      flat
-    >
+    <v-btn slot="activator" flat>
       Szenario ändern...
     </v-btn>
-    
+
     <v-list>
       <v-list-tile
         v-for="(scenario, i) in $store.state.scenarios"
@@ -26,17 +23,17 @@
 
 <script>
 export default {
-	props: [],
-	data() {
-		return {
-			open: false
-		}
-	},
-	methods: {
-		setScenario(scenario) {
-			this.open = false;
-			this.$store.commit('setScenario', scenario);
-		}
-	}
-}
+  props: [],
+  data() {
+    return {
+      open: false
+    };
+  },
+  methods: {
+    setScenario(scenario) {
+      this.open = false;
+      this.$store.commit('setScenario', scenario);
+    }
+  }
+};
 </script>
