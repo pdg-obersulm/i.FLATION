@@ -35,7 +35,7 @@
           />
           <v-layout justify-space-around>
             <v-menu auto origin="center center">
-              <v-btn icon slot="activator">
+              <v-btn slot="activator" icon>
                 <v-icon
                   >mdi-quality-{{
                     quality === '1080' ? 'high' : 'medium'
@@ -53,16 +53,16 @@
               </v-list>
             </v-menu>
             <v-btn
-              icon
               v-shortkey="{ j: ['j'], arrow: ['arrowleft'] }"
+              icon
               @shortkey="rewind"
               @click="rewind"
             >
               <v-icon>mdi-rewind</v-icon>
             </v-btn>
             <v-btn
-              icon
               v-shortkey="{ k: ['k'], space: ['space'] }"
+              icon
               @shortkey="playPause"
               @click="playPause"
             >
@@ -75,16 +75,16 @@
               <v-icon v-else>{{ playing ? 'mdi-pause' : 'mdi-play' }}</v-icon>
             </v-btn>
             <v-btn
-              icon
               v-shortkey="{ l: ['l'], arrow: ['arrowright'] }"
+              icon
               @shortkey="forward"
               @click="forward"
             >
               <v-icon>mdi-fast-forward</v-icon>
             </v-btn>
             <v-btn
-              icon
               v-shortkey="['f']"
+              icon
               @shortkey="toggleFullscreen"
               @click="toggleFullscreen"
             >

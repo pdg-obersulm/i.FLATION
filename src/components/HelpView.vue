@@ -9,7 +9,7 @@
           <span>
             Auf dieser Website möchten wir erklären, was Preisstabilität in
             modernen Volkswirtschaften bedeutet. Dazu entwickeln wir drei
-            mögliche Szenarien für Deutschlands Volkswirtschaft, welches Sie
+            mögliche Szenarien für Deutschlands Volkswirtschaft, welche Sie
             rechts oben frei wählen können. Wünschen Sie eine einfache Erklärung
             der Szenarien, klicken Sie auf
             <v-icon small>mdi-information</v-icon>. Sehen Sie selbst, welche
